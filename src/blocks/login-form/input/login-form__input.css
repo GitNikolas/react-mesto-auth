@@ -1,0 +1,23 @@
+.login-form__input{
+  background-color: black;
+  width: 358px;
+  margin: 0 auto 5px;
+  padding: 0 0 9px;
+  border:none;
+  border-bottom: 2px solid rgb(204, 204, 204, 1);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.21;
+  color:rgb(204, 204, 204, 1);
+}
+
+@media screen and (max-width:425px) {
+  .login-form__input{
+    margin: 0 auto 30px;
+    width: 238px;
+  }
+
+  .login-form__input:last-of-type{
+    margin-bottom: 45px;
+  }
+}

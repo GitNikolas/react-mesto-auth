@@ -1,0 +1,13 @@
+.photo-card__like-counter{
+  grid-area: like-counter;
+  color:black;
+  font-size: 13px;
+  line-height: 1.23;
+  align-self: center;
+  justify-self: center;
+  margin-top: 3px;
+  max-width: 45px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

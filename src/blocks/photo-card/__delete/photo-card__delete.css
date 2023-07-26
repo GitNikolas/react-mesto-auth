@@ -1,0 +1,15 @@
+.photo-card__delete{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 18px;
+  height: 19px;
+  border: none;
+  background-image: url(../../../images/delete.svg);
+  background-color: rgba(0,0,0,0);
+  cursor: pointer;
+}
+
+.photo-card__delete:hover{
+  opacity:.6;
+}

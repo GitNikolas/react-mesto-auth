@@ -1,0 +1,9 @@
+.photo-card__title{
+  grid-area: element__title;
+  background-color: #FFFFFF;
+  display: grid;
+  grid-template-areas:
+  'element__title-text element__like'
+  'element__title-text like-counter';
+  grid-template-columns: 230px 52px;
+}

@@ -1,0 +1,32 @@
+.profile__avatar{
+  width: 120px;
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  margin-right: 30px;
+}
+
+.profile__avatar:hover:before {
+  content:url(../../../images/pencil_large.svg);
+  position: relative;
+  left: 40%;
+  top: 40%;
+}
+
+.profile__avatar:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+@media screen and (max-width:730px) {
+  .profile__avatar{
+    margin: 0 0 15px;
+  }
+}
+
+@media screen and (max-width:425px) {
+  .profile__avatar{
+    margin: 0;
+  }
+}
