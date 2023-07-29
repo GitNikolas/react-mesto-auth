@@ -1,8 +1,10 @@
 import React from "react";
 import logo from '../../images/logo.svg';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Header = ({ loggedIn, currentEmail, signOut }) => {
+  let location = useLocation();
+
   return (
     <header className="header">
     <Link to="/">
@@ -14,20 +16,24 @@ const Header = ({ loggedIn, currentEmail, signOut }) => {
     </Link>
 
     <nav  className="header__navigation">
+
     {loggedIn && <p className="header__email">{currentEmail}</p>}
-    <Routes>
-      <Route path='sign-in' element={<Link to='/sign-up' className="header__nav-button">Регистрация</Link>} />
-      <Route path='sign-up' element={<Link to='/' className="header__nav-button">Войти</Link>} />
-      <Route
-      path='/'
-      element={
+
+    {location.pathname ==='/' &&
+    <Link
+    to='/sign-in'
+    className="header__nav-button_type_exit"
+    onClick={signOut}
+    >Выйти</Link>}
+
+    {location.pathname ==='/sign-in' && <Link to='/sign-up' className="header__nav-button">Регистрация</Link>}
+
+    {location.pathname ==='/sign-up' &&
       <Link
       to='/sign-in'
-      className="header__nav-button_type_exit"
-      onClick={signOut}
-      >Выйти</Link>}
-      />
-    </Routes>
+      className="header__nav-button"
+      >Войти</Link>}
+
     </nav>
   </header>
   );

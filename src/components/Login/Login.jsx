@@ -2,7 +2,7 @@ import React from "react";
 import Input from "../UI/Input/Input";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, isLoading }) => {
 
   const [values, setValues] = React.useState({password:'', email:''});
 
@@ -49,7 +49,7 @@ const Login = ({ handleLogin }) => {
       />
       <SubmitButton
       className="login-form__submit-button"
-      >Войти</SubmitButton>
+      >Войти{isLoading&& '...'} </SubmitButton>
     </form>
   );
 }

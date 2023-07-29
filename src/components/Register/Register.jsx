@@ -3,7 +3,7 @@ import Input from "../UI/Input/Input";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import {Link} from 'react-router-dom';
 
-const Register = ({handleRegister}) => {
+const Register = ({ handleRegister, isLoading }) => {
 
   const [values, setValues] = React.useState({password:'', email:''});
 
@@ -53,7 +53,7 @@ const Register = ({handleRegister}) => {
 
       <SubmitButton
       className="login-form__submit-button"
-      >Зарегистрироваться</SubmitButton>
+      >Зарегистрироваться{isLoading && '...'} </SubmitButton>
       <p
       className="login-form__subtitle">
       Вы уже зарегистрированы? <Link to='sign-in' className='login-form__link'>Войти</Link></p>

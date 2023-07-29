@@ -6,7 +6,6 @@ import SubmitButton from "../UI/SubmitButton/SubmitButton";
 const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
 
   const [avatar , setAvatar ] = React.useState('');
-  const avatarRef = React.useRef();
 
   function handleAvatarChange(event) {
     setAvatar(event.target.value);
@@ -14,10 +13,7 @@ const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    onUpdateAvatar({
-      avatar: avatarRef.current.value,
-    });
-
+    onUpdateAvatar({avatar: avatar})
   }
 
   React.useEffect( () => {
@@ -42,7 +38,6 @@ const EditAvatarPopup = ({isOpen, onClose, onUpdateAvatar}) => {
       placeholder="Ссылка на картинку"
       value={avatar}
       onChange={handleAvatarChange}
-      ref={avatarRef}
     >
     </Input>
 

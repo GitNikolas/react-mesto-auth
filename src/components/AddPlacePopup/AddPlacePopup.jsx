@@ -3,7 +3,7 @@ import PopupWithForm from "../Popups/PopupWithForm";
 import Input from "../UI/Input/Input";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 
-const AddPlacePopup = ({ isOpen, onClose, onAddPlace}) => {
+const AddPlacePopup = ({ isOpen, onClose, onAddPlace, isLoading }) => {
 
   const [values, setValues] = React.useState({ name:'', link:''});
 
@@ -19,8 +19,11 @@ const handleChange = (event) => {
 function handleSubmit(event) {
   event.preventDefault();
   onAddPlace(values);
-  setValues({name:'' , link:''});
 }
+
+React.useEffect( () => {
+  setValues({name:'' , link:''});
+}, [isOpen])
 
 return (
   <PopupWithForm
@@ -55,7 +58,7 @@ return (
       value={values.link}
     />
 
-    <SubmitButton>Создать</SubmitButton>
+    <SubmitButton>Создать{isLoading && '...'}</SubmitButton>
   </PopupWithForm>
   );
 }

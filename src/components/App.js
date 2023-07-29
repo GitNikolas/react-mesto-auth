@@ -42,18 +42,18 @@ function App() {
 
   const [ email, setEmail ] = React.useState('');
 
+  const [ isLoading, setIsLoading ] = React.useState(false);
+
   const navigate = useNavigate();
 
   React.useEffect(() => {
     const jwt = localStorage.getItem('jwt');
     if(jwt){
-    Promise.all([api.getInitialCards(), api.getUserInformation(), checkToken(jwt)])
-    .then(([dataCard, dataUser, checkData]) => {
-      if (checkData.data) {
+    checkToken(jwt)
+    .then((res) => {
+      if (res.data) {
         navigate('/')
-        setCards(dataCard);
-        setCurrentUser(dataUser);
-        setEmail(checkData.data.email);
+        setEmail(res.data.email);
         setloggedIn(true);
       } else {
         navigate('/sign-in')
@@ -61,9 +61,19 @@ function App() {
     })
     .catch((err) => console.error(`Ошибка: ${err}`))
     }
+  }, [])
+
+  React.useEffect(() => {
+    Promise.all([api.getInitialCards(), api.getUserInformation()])
+    .then(([dataCard, dataUser]) => {
+        setCards(dataCard);
+        setCurrentUser(dataUser);
+    })
+    .catch((err) => console.error(`Ошибка: ${err}`))
   }, [loggedIn])
 
   function handleRegister ({ password, email }){
+    setIsLoading(true);
     return register(password, email)
     .then( (res) => {
       setInfoTooltipPopupOpen(true);
@@ -77,14 +87,16 @@ function App() {
     .catch( (err) => {
       console.error(err);
     })
-
+    .finally(() => {setIsLoading(false)});
   }
 
   function handleLogin ({ password, email }){
+    setIsLoading(true);
     return login(password, email)
     .then( (res) => {
       if (res.token){
         localStorage.setItem('jwt', res.token);
+        setEmail(email);
         setloggedIn(true);
         navigate('/');
       }
@@ -92,6 +104,7 @@ function App() {
     .catch( (err) => {
       console.error(err);
     })
+    .finally(() => {setIsLoading(false)});
   }
 
   function handleSignout() {
@@ -154,39 +167,47 @@ function App() {
   }
 
     function handleConfirmationSubmit() {
-    api.deleteCard(currentCard._id)
-    .then( () => {
-      setCards( (state) => state.filter((item) => item._id !== currentCard._id));
-      closeAllPopups();
-    })
-    .catch((err) => console.error(`Ошибка: ${err}`));
+      setIsLoading(true);
+      api.deleteCard(currentCard._id)
+      .then( () => {
+        setCards( (state) => state.filter((item) => item._id !== currentCard._id));
+        closeAllPopups();
+      })
+      .catch((err) => console.error(`Ошибка: ${err}`))
+      .finally(() => {setIsLoading(false)});
   }
 
 function handleUpdateUser(userData) {
+  setIsLoading(true);
   api.setUserInformation(userData)
   .then( () => {
     setCurrentUser((state)=>({ ...state, name:userData.name, about:userData.about }));
     closeAllPopups();
   })
-  .catch((err) => console.error(`Ошибка: ${err}`));
+  .catch((err) => console.error(`Ошибка: ${err}`))
+  .finally(() => {setIsLoading(false)});
 }
 
 function handleUpdateAvatar(avatarData) {
+  setIsLoading(true);
   api.setUserAvatar(avatarData)
   .then( () => {
     setCurrentUser((state)=>({ ...state, avatar:avatarData.avatar }));
     closeAllPopups();
   })
-  .catch((err) => console.error(`Ошибка: ${err}`));
+  .catch((err) => console.error(`Ошибка: ${err}`))
+  .finally(() => {setIsLoading(false)});
 }
 
 function handleAddPlaceSubmit(cardData) {
+  setIsLoading(true);
   api.setInitialCard(cardData)
   .then( (newCard) => {
     setCards([newCard, ...cards]);
     closeAllPopups();
   })
-  .catch((err) => console.error(`Ошибка: ${err}`));
+  .catch((err) => console.error(`Ошибка: ${err}`))
+  .finally(() => {setIsLoading(false)});
 }
 
   return (
@@ -217,9 +238,15 @@ function handleAddPlaceSubmit(cardData) {
               />}
             />
 
-            <Route path="/sign-in" element={<Login handleLogin={handleLogin} />} />
+            <Route path="/sign-in" element={<Login
+            handleLogin={handleLogin}
+            isLoading={isLoading}
+            />} />
 
-            <Route path="/sign-up" element={<Register handleRegister={handleRegister} />} />
+            <Route path="/sign-up" element={<Register
+            handleRegister={handleRegister}
+            isLoading={isLoading}
+            />} />
 
             <Route
               path='*'
@@ -242,12 +269,16 @@ function handleAddPlaceSubmit(cardData) {
         { currentUser && <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
-        onUpdateUser={handleUpdateUser} />}
+        onUpdateUser={handleUpdateUser}
+        isLoading={isLoading}
+        />}
 
         <AddPlacePopup
         isOpen={isAddPlacePopupOpen}
         onClose={closeAllPopups}
-        onAddPlace={handleAddPlaceSubmit} />
+        onAddPlace={handleAddPlaceSubmit}
+        isLoading={isLoading}
+        />
 
         { currentUser && <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />}
 
@@ -255,6 +286,7 @@ function handleAddPlaceSubmit(cardData) {
         isOpen={isConfirmationPopup}
         onClose={closeAllPopups}
         onSubmit={handleConfirmationSubmit}
+        isLoading={isLoading}
         />
 
         <ImagePopup

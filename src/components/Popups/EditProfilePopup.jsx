@@ -4,7 +4,7 @@ import Input from "../UI/Input/Input";
 import SubmitButton from "../UI/SubmitButton/SubmitButton";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
-const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
+const EditProfilePopup = ({ isOpen, onClose, onUpdateUser, isLoading }) => {
 
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState(currentUser.name);
@@ -67,7 +67,7 @@ const EditProfilePopup = ({isOpen, onClose, onUpdateUser}) => {
     >
     </Input>
 
-    <SubmitButton>Сохранить</SubmitButton>
+    <SubmitButton>Сохранить{isLoading && '...'} </SubmitButton>
   </PopupWithForm>
   );
 }
